@@ -1,6 +1,9 @@
 import 'dart:io';
 
 class Terminal {  
+  int columns = stdout.terminalColumns;
+  int rows = stdout.terminalLines;
+
   void print(
     String text, {
       List<int> effects = const [],
