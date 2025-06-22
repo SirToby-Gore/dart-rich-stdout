@@ -7,3 +7,12 @@
 - Developed `input` method with customizable input checks.
 - Introduced `Ansi` class with `construct` method for generating ANSI escape codes.
 
+# 1.0.2
+
+- Added `rows` and `columns`
+
+# 1.0.3
+
+- Changed name of `rows` and `columns` to `width` and `height`
+- Updated the `endOfFile`
+- Added new property `newLineItem`

@@ -1,8 +1,9 @@
 import 'dart:io';
 
 class Terminal {  
-  int columns = stdout.terminalColumns;
-  int rows = stdout.terminalLines;
+  int height = stdout.terminalColumns;
+  int width = stdout.terminalLines;
+  String newLineItem = stdout.lineTerminator;
 
   void print(
     String text, {
@@ -13,11 +14,11 @@ class Terminal {
     text = '${Ansi.construct(effects)}$text';
     
     if (resetStyle) {
-      text += '\x1B[0m';
+      text += Ansi.construct([Effect.reset]);
     }
 
     if (newLine) {
-      stdout.write('\n');
+      stdout.write(newLineItem);
     }
 
     stdout.write(text);
@@ -48,10 +49,10 @@ class Terminal {
   }) {
     text = '${Ansi.construct(effects)}$text';
 
-    text += '\x1B[0m';
+    text += Ansi.construct([Effect.reset]);
     
     if (newLine) {
-      stdout.write('\n');
+      stdout.write(newLineItem);
     }
 
     while (true) {
@@ -73,13 +74,13 @@ class Terminal {
     if (input.isNotEmpty) {
       return true;
     } else {
-      stdout.write('Invalid input \n');
       return false;
     }
   }
 
   void endOfFile() {
-    print('\n', resetStyle: true, newLine: false);
+    print(newLineItem, resetStyle: true, newLine: false);
+    showCursor();
   }
 
   void clear() {
