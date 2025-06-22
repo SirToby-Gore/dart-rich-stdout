@@ -1,6 +1,6 @@
 name: rich_stdout
 description: A library that provides functions for modifying the console output in Dart. It currently supports colouring, bolding, italicising, and underlining text. It also supports hiding and showing the cursor, and moving the cursor to an arbitrary position on the screen.
-version: 1.0.3
+version: 1.0.4
 repository: https://github.com/SirToby-Gore/dart-rich-stdout
 
 environment:

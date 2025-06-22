@@ -1,8 +1,8 @@
 import 'dart:io';
 
 class Terminal {  
-  int height = stdout.terminalColumns;
-  int width = stdout.terminalLines;
+  int width = stdout.terminalColumns;
+  int height = stdout.terminalLines;
   String newLineItem = stdout.lineTerminator;
 
   void print(

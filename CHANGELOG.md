@@ -16,3 +16,7 @@
 - Changed name of `rows` and `columns` to `width` and `height`
 - Updated the `endOfFile`
 - Added new property `newLineItem`
+
+# 1.0.4
+
+- Bug fix `height` and `width` had each others values
