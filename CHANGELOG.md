@@ -20,3 +20,8 @@
 # 1.0.4
 
 - Bug fix `height` and `width` had each others values
+
+# 1.0.5
+
+- Fixing issue with a new line when initialising `Terminal`
+- Added the ability to put in a custom `IOSink` (default is `stdout`) for the output, however `width` and `height` are still tied to `stdout`

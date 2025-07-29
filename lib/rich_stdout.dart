@@ -5,12 +5,24 @@ class Terminal {
   int height = stdout.terminalLines;
   String newLineItem = stdout.lineTerminator;
 
+  IOSink outputPoint = stdout;
+  bool _firstLine = true;
+
+  Terminal([IOSink? outputPoint]) {
+    this.outputPoint = outputPoint ?? this.outputPoint;
+  }
+
   void print(
     String text, {
       List<int> effects = const [],
       bool newLine = true,
       bool resetStyle = true
   }) {
+    if (_firstLine) {
+      _firstLine = false;
+      newLine = false;
+    }
+
     text = '${Ansi.construct(effects)}$text';
     
     if (resetStyle) {
@@ -18,26 +30,26 @@ class Terminal {
     }
 
     if (newLine) {
-      stdout.write(newLineItem);
+      outputPoint.write(newLineItem);
     }
 
-    stdout.write(text);
+    outputPoint.write(text);
   }
 
-  void error(String message) {
-    print(message, effects: [Colour.foregroundRed, Effect.bold]);
+  void error(String message, {bool newLine = true}) {
+    print(message, effects: [Colour.foregroundRed, Effect.bold], newLine: newLine);
   }
 
-  void warning(String message) {
-    print(message, effects: [Colour.foregroundYellow, Effect.bold]);
+  void warning(String message, {bool newLine = true}) {
+    print(message, effects: [Colour.foregroundYellow, Effect.bold], newLine: newLine);
   }
 
-  void success(String message) {
-    print(message, effects: [Colour.foregroundGreen, Effect.bold]);
+  void success(String message, {bool newLine = true}) {
+    print(message, effects: [Colour.foregroundGreen, Effect.bold], newLine: newLine);
   }
   
-  void info(String message) {
-    print(message, effects: [Colour.foregroundBlue, Effect.bold]);
+  void info(String message, {bool newLine = true}) {
+    print(message, effects: [Colour.foregroundBlue, Effect.bold], newLine: newLine);
   }
 
   String input(
@@ -52,11 +64,11 @@ class Terminal {
     text += Ansi.construct([Effect.reset]);
     
     if (newLine) {
-      stdout.write(newLineItem);
+      outputPoint.write(newLineItem);
     }
 
     while (true) {
-      stdout.write(text);
+      outputPoint.write(text);
 
       String? input = stdin.readLineSync();
 
@@ -84,39 +96,39 @@ class Terminal {
   }
 
   void clear() {
-    stdout.write('\x1B[2J');
+    outputPoint.write('\x1B[2J');
   }
 
   void clearLine() {
-    stdout.write('\x1B[2K');
+    outputPoint.write('\x1B[2K');
   }
 
   void hideCursor() {
-    stdout.write('\x1B[?25l');
+    outputPoint.write('\x1B[?25l');
   }
 
   void showCursor() {
-    stdout.write('\x1B[?25h');
+    outputPoint.write('\x1B[?25h');
   }
 
   void moveCursor(int x, int y) {
-    stdout.write('\x1B[$y;${x}H');
+    outputPoint.write('\x1B[$y;${x}H');
   }
 
   void moveCursorUp(int y) {
-    stdout.write('\x1B[${y}A');
+    outputPoint.write('\x1B[${y}A');
   }
 
   void moveCursorDown(int y) {
-    stdout.write('\x1B[${y}B');
+    outputPoint.write('\x1B[${y}B');
   }
 
   void moveCursorLeft(int x) {
-    stdout.write('\x1B[${x}D');
+    outputPoint.write('\x1B[${x}D');
   }
 
   void moveCursorRight(int x) {
-    stdout.write('\x1B[${x}C');
+    outputPoint.write('\x1B[${x}C');
   }
 }
 
