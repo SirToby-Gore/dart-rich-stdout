@@ -1,8 +1,24 @@
 import 'dart:io';
 
 class Terminal {  
-  int width = stdout.terminalColumns;
-  int height = stdout.terminalLines;
+  int width = () {
+    try {
+      return stdout.terminalColumns;
+    }
+    catch (_) {
+      return 0;
+    }
+  }();
+
+  int height = () {
+    try {
+      return stdout.terminalLines;
+    }
+    catch (_) {
+      return 0;
+    }
+  }();
+  
   String newLineItem = stdout.lineTerminator;
 
   IOSink outputPoint = stdout;

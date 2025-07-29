@@ -29,3 +29,7 @@
 # 1.0.6
 
 - Bug fix with an extra new line when no lines have been outputted with the `endOfFile` method
+
+# 1.0.7
+
+- Bug fix with stdout pipelines being unable to read number of lines or columns, now if not there, set to zero
