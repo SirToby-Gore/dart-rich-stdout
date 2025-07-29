@@ -25,3 +25,7 @@
 
 - Fixing issue with a new line when initialising `Terminal`
 - Added the ability to put in a custom `IOSink` (default is `stdout`) for the output, however `width` and `height` are still tied to `stdout`
+
+# 1.0.6
+
+- Bug fix with an extra new line when no lines have been outputted with the `endOfFile` method

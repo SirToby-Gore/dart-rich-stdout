@@ -91,7 +91,7 @@ class Terminal {
   }
 
   void endOfFile() {
-    print(newLineItem, resetStyle: true, newLine: false);
+    print('', resetStyle: true, newLine: !_firstLine);
     showCursor();
   }
 
