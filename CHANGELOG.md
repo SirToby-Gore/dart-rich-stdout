@@ -33,3 +33,7 @@
 # 1.0.7
 
 - Bug fix with stdout pipelines being unable to read number of lines or columns, now if not there, set to zero
+
+# 1.0.8
+
+- Changing an issue with `ANSI`s `Colour`, to set it to `defaultForeground` over `setDefault` which was incorrect

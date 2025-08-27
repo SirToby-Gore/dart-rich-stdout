@@ -170,7 +170,7 @@ class Colour {
   static const int foregroundWhite = 37;
 
   static const int setForeground = 38;
-  static const int setDefault = 39;
+  static const int defaultForeground = 39;
 
   static const int backgroundBlack = 40;
   static const int backgroundRed = 41;
