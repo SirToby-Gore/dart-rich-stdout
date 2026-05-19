@@ -37,3 +37,11 @@
 # 1.0.8
 
 - Changing an issue with `ANSI`s `Colour`, to set it to `defaultForeground` over `setDefault` which was incorrect
+
+# 1.0.9
+
+- Updates to format with a linter
+
+# 1.0.10
+
+- Adding `table` method to `Terminal`

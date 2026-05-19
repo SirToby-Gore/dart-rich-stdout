@@ -122,6 +122,141 @@ class Terminal {
     }
   }
 
+  void table(
+    dynamic object, {
+    Map<String, List<int>>? colourPairings,
+    String tab = '  ',
+    int indent = 0,
+  }) {
+    final pairings =
+        colourPairings ??
+        {
+          'str': [Colour.foregroundGreen],
+          'int': [Colour.foregroundBlue],
+          'float': [Colour.foregroundBlue],
+          'bool': [Colour.foregroundYellow],
+          'dict': [Colour.foregroundLightBlue, Effect.faint],
+          'list': [Colour.foregroundLightBlue, Effect.faint],
+          'set': [Colour.foregroundPurple, Effect.faint],
+          'tuple': [Colour.foregroundPurple, Effect.faint],
+        };
+
+    // Helper to mimic Python's type string extraction
+    String getStrType(dynamic data) {
+      if (data is String) return 'str';
+      if (data is int) return 'int';
+      if (data is double) return 'float';
+      if (data is bool) return 'bool';
+      if (data is Map) return 'dict';
+      if (data is List) return 'list';
+      if (data is Set) return 'set';
+      return data.runtimeType.toString();
+    }
+
+    String valueColourPair(dynamic data) {
+      final codes = pairings[getStrType(data)] ?? [];
+      return Ansi.construct(codes);
+    }
+
+    late String Function(dynamic, int) formatData;
+
+    List<String> formatKeyValues(
+      Iterable<dynamic> keys,
+      Iterable<dynamic> values,
+      int currentIndent,
+    ) {
+      final lines = <String>[];
+      final keyList = keys.toList();
+      final valueList = values.toList();
+
+      for (var i = 0; i < keyList.length; i++) {
+        final kStr = formatData(keyList[i], currentIndent);
+        final vStr = formatData(valueList[i], currentIndent);
+        lines.add((tab * currentIndent) + kStr + ': ' + vStr + ',');
+      }
+      return lines;
+    }
+
+    List<String> formatIterable(Iterable<dynamic> data, int currentIndent) {
+      final lines = <String>[];
+      for (var subData in data) {
+        lines.add(
+          (tab * currentIndent) + formatData(subData, currentIndent) + ',',
+        );
+      }
+      return lines;
+    }
+
+    formatData = (dynamic data, int currentIndent) {
+      String string = valueColourPair(data);
+      final typeStr = getStrType(data);
+
+      switch (typeStr) {
+        case 'str':
+          string += '"$data"';
+          break;
+        case 'int':
+        case 'float':
+          string += data.toString();
+          break;
+        case 'bool':
+          string += data ? 'TRUE' : 'FALSE';
+          break;
+        case 'dict':
+          final mapData = data as Map;
+          string +=
+              '{' +
+              (Ansi.construct([Effect.reset])) +
+              '\n' +
+              formatKeyValues(
+                mapData.keys,
+                mapData.values,
+                currentIndent + 1,
+              ).join('\n') +
+              '\n' +
+              (tab * currentIndent) +
+              valueColourPair(const {}) +
+              '}' +
+              (Ansi.construct([Effect.reset]));
+          break;
+        case 'list':
+          final listData = data as Iterable;
+          string +=
+              '[' +
+              (Ansi.construct([Effect.reset])) +
+              '\n' +
+              formatIterable(listData, currentIndent + 1).join('\n') +
+              '\n' +
+              (tab * currentIndent) +
+              valueColourPair(const []) +
+              ']' +
+              (Ansi.construct([Effect.reset]));
+          break;
+        case 'set':
+          final setData = data as Set;
+          string +=
+              '{' +
+              (Ansi.construct([Effect.reset])) +
+              '\n' +
+              formatIterable(setData, currentIndent + 1).join('\n') +
+              '\n' +
+              (tab * currentIndent) +
+              valueColourPair(const <dynamic>{}) +
+              '}' +
+              (Ansi.construct([Effect.reset]));
+          break;
+        default:
+          string = data.toString();
+      }
+
+      string += Ansi.construct([Effect.reset]);
+
+      return string;
+    };
+
+    this.print(formatData(object, indent));
+  }
+
   void endOfFile() {
     print('', resetStyle: true, newLine: !_firstLine);
     showCursor();
