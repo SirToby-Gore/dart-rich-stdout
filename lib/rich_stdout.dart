@@ -1,11 +1,10 @@
 import 'dart:io';
 
-class Terminal {  
+class Terminal {
   int width = () {
     try {
       return stdout.terminalColumns;
-    }
-    catch (_) {
+    } catch (_) {
       return 0;
     }
   }();
@@ -13,12 +12,11 @@ class Terminal {
   int height = () {
     try {
       return stdout.terminalLines;
-    }
-    catch (_) {
+    } catch (_) {
       return 0;
     }
   }();
-  
+
   String newLineItem = stdout.lineTerminator;
 
   IOSink outputPoint = stdout;
@@ -30,9 +28,9 @@ class Terminal {
 
   void print(
     String text, {
-      List<int> effects = const [],
-      bool newLine = true,
-      bool resetStyle = true
+    List<int> effects = const [],
+    bool newLine = true,
+    bool resetStyle = true,
   }) {
     if (_firstLine) {
       _firstLine = false;
@@ -40,7 +38,7 @@ class Terminal {
     }
 
     text = '${Ansi.construct(effects)}$text';
-    
+
     if (resetStyle) {
       text += Ansi.construct([Effect.reset]);
     }
@@ -53,32 +51,50 @@ class Terminal {
   }
 
   void error(String message, {bool newLine = true}) {
-    print(message, effects: [Colour.foregroundRed, Effect.bold], newLine: newLine);
+    print(
+      message,
+      effects: [Colour.foregroundRed, Effect.bold],
+      newLine: newLine,
+    );
   }
 
   void warning(String message, {bool newLine = true}) {
-    print(message, effects: [Colour.foregroundYellow, Effect.bold], newLine: newLine);
+    print(
+      message,
+      effects: [Colour.foregroundYellow, Effect.bold],
+      newLine: newLine,
+    );
   }
 
   void success(String message, {bool newLine = true}) {
-    print(message, effects: [Colour.foregroundGreen, Effect.bold], newLine: newLine);
+    print(
+      message,
+      effects: [Colour.foregroundGreen, Effect.bold],
+      newLine: newLine,
+    );
   }
-  
+
   void info(String message, {bool newLine = true}) {
-    print(message, effects: [Colour.foregroundBlue, Effect.bold], newLine: newLine);
+    print(
+      message,
+      effects: [Colour.foregroundBlue, Effect.bold],
+      newLine: newLine,
+    );
   }
 
   String input(
     String text, {
-      List<int> effects = const [],
-      bool newLine = true,
-      bool resetStyle = true,
-      bool Function(String) check = Terminal.defaultInputCheck,
+    List<int> effects = const [],
+    bool newLine = true,
+    bool resetStyle = true,
+    bool Function(String) check = Terminal.defaultInputCheck,
   }) {
     text = '${Ansi.construct(effects)}$text';
 
-    text += Ansi.construct([Effect.reset]);
-    
+    if (resetStyle) {
+      text += Ansi.construct([Effect.reset]);
+    }
+
     if (newLine) {
       outputPoint.write(newLineItem);
     }
@@ -214,7 +230,7 @@ class Effect {
 
   static const int boldOrDoubleUnderline = 21;
   static const int normalFontWeight = 22;
-  
+
   static const int notItalicNotFraktur = 23;
 
   static const int underlineOff = 24;
@@ -222,7 +238,6 @@ class Effect {
   static const int inverse = 27;
   static const int reveal = 28;
   static const int notStrikeThrough = 29;
-
 
   static const int framed = 51;
   static const int encircled = 52;
@@ -239,5 +254,3 @@ class Ideogram {
   static const int stressMarking = 64;
   static const int attributesOff = 65;
 }
-
-
