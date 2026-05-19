@@ -10,5 +10,14 @@ void main() {
       Effect.bold,
     ],
   );
+
+  terminal.table({
+    'item 1': [
+      8.9,
+      true, 
+      'new string',
+      7,
+    ]
+  });
   terminal.endOfFile();
 }

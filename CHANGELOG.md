@@ -45,3 +45,7 @@
 # 1.0.10
 
 - Adding `table` method to `Terminal`
+
+# 1.0.11
+
+- Fixing bug with `table` method on `Terminal` not working for maps:

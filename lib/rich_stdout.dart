@@ -141,7 +141,6 @@ class Terminal {
           'tuple': [Colour.foregroundPurple, Effect.faint],
         };
 
-    // Helper to mimic Python's type string extraction
     String getStrType(dynamic data) {
       if (data is String) return 'str';
       if (data is int) return 'int';
@@ -153,8 +152,8 @@ class Terminal {
       return data.runtimeType.toString();
     }
 
-    String valueColourPair(dynamic data) {
-      final codes = pairings[getStrType(data)] ?? [];
+    String typeColourPair(String typeStr) {
+      final codes = pairings[typeStr] ?? [];
       return Ansi.construct(codes);
     }
 
@@ -188,8 +187,8 @@ class Terminal {
     }
 
     formatData = (dynamic data, int currentIndent) {
-      String string = valueColourPair(data);
       final typeStr = getStrType(data);
+      String string = typeColourPair(typeStr);
 
       switch (typeStr) {
         case 'str':
@@ -205,52 +204,23 @@ class Terminal {
         case 'dict':
           final mapData = data as Map;
           string +=
-              '{' +
-              (Ansi.construct([Effect.reset])) +
-              '\n' +
-              formatKeyValues(
-                mapData.keys,
-                mapData.values,
-                currentIndent + 1,
-              ).join('\n') +
-              '\n' +
-              (tab * currentIndent) +
-              valueColourPair(const {}) +
-              '}' +
-              (Ansi.construct([Effect.reset]));
+              '''{${Ansi.construct([Effect.reset])}\n${formatKeyValues(mapData.keys, mapData.values, currentIndent + 1).join('\n')}\n${tab * currentIndent}${typeColourPair('dict')}}''';
           break;
         case 'list':
           final listData = data as Iterable;
           string +=
-              '[' +
-              (Ansi.construct([Effect.reset])) +
-              '\n' +
-              formatIterable(listData, currentIndent + 1).join('\n') +
-              '\n' +
-              (tab * currentIndent) +
-              valueColourPair(const []) +
-              ']' +
-              (Ansi.construct([Effect.reset]));
+              '''[${Ansi.construct([Effect.reset])}\n${formatIterable(listData, currentIndent + 1).join('\n')}\n${tab * currentIndent}${typeColourPair('list')}]''';
           break;
         case 'set':
           final setData = data as Set;
           string +=
-              '{' +
-              (Ansi.construct([Effect.reset])) +
-              '\n' +
-              formatIterable(setData, currentIndent + 1).join('\n') +
-              '\n' +
-              (tab * currentIndent) +
-              valueColourPair(const <dynamic>{}) +
-              '}' +
-              (Ansi.construct([Effect.reset]));
+              '''{${Ansi.construct([Effect.reset])}\n${formatIterable(setData, currentIndent + 1).join('\n')}\n${tab * currentIndent}${typeColourPair('set')}}''';
           break;
         default:
-          string = data.toString();
+          string += data.toString();
       }
 
       string += Ansi.construct([Effect.reset]);
-
       return string;
     };
 
